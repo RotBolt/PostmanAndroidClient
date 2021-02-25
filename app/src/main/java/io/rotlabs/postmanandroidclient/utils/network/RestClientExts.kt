@@ -1,6 +1,5 @@
-package io.rotlabs.postmanandroidclient.utils.restClient
+package io.rotlabs.postmanandroidclient.utils.network
 
-import okhttp3.HttpUrl
 import okhttp3.RequestBody
 
 fun RequestBody?.getRequestOrThrowException(

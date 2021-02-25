@@ -1,21 +1,17 @@
 package io.rotlabs.postmanandroidclient.data.remote
 
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.JsonReader
-import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import io.rotlabs.postmanandroidclient.data.models.AuthInfo
 import io.rotlabs.postmanandroidclient.data.models.BodyInfo
 import io.rotlabs.postmanandroidclient.data.models.FormDataContent
 import io.rotlabs.postmanandroidclient.data.models.RequestMethod
-import io.rotlabs.postmanandroidclient.utils.restClient.MimeType
-import io.rotlabs.postmanandroidclient.utils.restClient.getRequestOrThrowException
+import io.rotlabs.postmanandroidclient.utils.network.MimeType
+import io.rotlabs.postmanandroidclient.utils.network.getRequestOrThrowException
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import okio.Buffer
 import java.io.IOException
 import javax.inject.Inject
 

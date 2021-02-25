@@ -8,7 +8,7 @@ import io.rotlabs.postmanandroidclient.data.models.BodyInfo
 import io.rotlabs.postmanandroidclient.data.models.RequestMethod
 import io.rotlabs.postmanandroidclient.utils.TestHelper
 import io.rotlabs.postmanandroidclient.utils.TestSchedulerProvider
-import io.rotlabs.postmanandroidclient.utils.restClient.MimeType
+import io.rotlabs.postmanandroidclient.utils.network.MimeType
 import okhttp3.Credentials
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient

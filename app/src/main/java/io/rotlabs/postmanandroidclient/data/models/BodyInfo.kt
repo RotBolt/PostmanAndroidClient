@@ -1,6 +1,6 @@
 package io.rotlabs.postmanandroidclient.data.models
 
-import io.rotlabs.postmanandroidclient.utils.restClient.MimeType
+import io.rotlabs.postmanandroidclient.utils.network.MimeType
 import java.io.File
 
 /**

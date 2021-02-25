@@ -1,4 +1,4 @@
-package io.rotlabs.postmanandroidclient.utils.restClient
+package io.rotlabs.postmanandroidclient.utils.network
 
 enum class MimeType(val type: String) {
 

@@ -2,7 +2,7 @@ package io.rotlabs.postmanandroidclient.utils
 
 import io.rotlabs.postmanandroidclient.data.models.BodyInfo
 import io.rotlabs.postmanandroidclient.data.models.FormDataContent
-import io.rotlabs.postmanandroidclient.utils.restClient.MimeType
+import io.rotlabs.postmanandroidclient.utils.network.MimeType
 import java.io.File
 
 class TestHelper {
