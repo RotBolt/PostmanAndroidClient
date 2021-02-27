@@ -4,21 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.rotlabs.postmanandroidclient.PostmanApp
+import io.rotlabs.postmanandroidclient.R
 import io.rotlabs.postmanandroidclient.di.component.DaggerFragmentComponent
 import io.rotlabs.postmanandroidclient.di.component.FragmentComponent
 import io.rotlabs.postmanandroidclient.di.modules.FragmentModule
 import io.rotlabs.postmanandroidclient.utils.common.Toaster
 import javax.inject.Inject
 
-abstract class BaseFragment<B : ViewBinding, VM : BaseViewModel> : Fragment() {
-
+abstract class BaseBottomSheetFragment<B : ViewBinding, VM : BaseViewModel> :
+    BottomSheetDialogFragment() {
 
     @Inject
     lateinit var viewModel: VM
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies(getFragmentComponent())
@@ -40,6 +40,7 @@ abstract class BaseFragment<B : ViewBinding, VM : BaseViewModel> : Fragment() {
         setupView(savedInstanceState)
     }
 
+    override fun getTheme(): Int = R.style.AppModalStyle
 
     /**
      *  View Binding for this fragment
@@ -52,6 +53,7 @@ abstract class BaseFragment<B : ViewBinding, VM : BaseViewModel> : Fragment() {
      *  Child classes need to call fragmentComponent.inject()
      *  to allow Dagger to provide required dependencies
      */
+
     protected abstract fun injectDependencies(buildComponent: FragmentComponent)
 
     /**
@@ -84,4 +86,5 @@ abstract class BaseFragment<B : ViewBinding, VM : BaseViewModel> : Fragment() {
     protected fun showToast(message: String) {
         Toaster.show(requireContext(), message)
     }
+
 }

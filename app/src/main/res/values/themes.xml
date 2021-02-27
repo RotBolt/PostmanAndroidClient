@@ -11,6 +11,22 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+
+        <item name="baseThemeColor">@android:color/white</item>
+        <item name="baseThemeComplimentColor">@android:color/black</item>
+        <item name="android:textColor">?attr/baseThemeComplimentColor</item>
+        <item name="shimmerColor">@color/greyShimmerLight</item>
+        <item name="shadeGrey">@color/grey500</item>
         <!-- Customize your theme here. -->
+    </style>
+
+
+    <style name="AppModalStyle" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+    </style>
+
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_bottom_sheet_bg</item>
     </style>
 </resources>
