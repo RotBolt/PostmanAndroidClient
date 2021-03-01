@@ -1,9 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.PostmanAndroidClient" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.PostmanAndroidClient" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/colorOrange</item>
+        <item name="colorPrimaryVariant">@color/colorOrange</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -28,5 +28,23 @@
 
     <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/rounded_bottom_sheet_bg</item>
+    </style>
+
+    <style name="Theme.PostmanAndroidClient.InputField">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColorHint">@color/greyShimmerLight</item>
+        <item name="android:background">@color/edit_text_bg_color</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:padding">@dimen/margin_8</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="Theme.PostmanAndroidClient.InputField.Outlined">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColorHint">@color/greyShimmerLight</item>
+        <item name="android:background">@drawable/text_field_bg</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:padding">@dimen/margin_8</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 </resources>

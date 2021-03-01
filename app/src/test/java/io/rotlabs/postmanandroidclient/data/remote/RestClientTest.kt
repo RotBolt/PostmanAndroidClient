@@ -9,10 +9,7 @@ import io.rotlabs.postmanandroidclient.data.models.RequestMethod
 import io.rotlabs.postmanandroidclient.utils.TestHelper
 import io.rotlabs.postmanandroidclient.utils.TestSchedulerProvider
 import io.rotlabs.postmanandroidclient.utils.network.MimeType
-import okhttp3.Credentials
-import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
-import okhttp3.Response
+import okhttp3.*
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
@@ -26,7 +23,7 @@ import java.util.concurrent.TimeUnit
 class RestClientTest {
 
     /**
-     *  Rule to that swaps the background executor to synchronous task executor to run the tests
+     *  Rule to swaps the background executor to synchronous task executor to run the tests
      */
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -286,7 +283,9 @@ class RestClientTest {
     @Test
     fun given_valid_request_and_valid_response_should_make_request_call_and_receive_response() {
 
-        server.enqueue(MockResponse().setResponseCode(200).setBody("{\"test\":\"json\"}"))
+        server.enqueue(
+            MockResponse().setResponseCode(200).setBody(testHelper.getTestResponseBody())
+        )
 
         val responseObserver: TestObserver<Response> = restClient.makeRequestCall(
             testUrl.toString(),
@@ -304,7 +303,7 @@ class RestClientTest {
             .assertValueCount(1)
             .assertValueAt(0) { response ->
                 val body = response.body
-                body != null && body.string() == "{\"test\":\"json\"}"
+                body != null && body.string() == testHelper.getTestResponseBody()
             }
 
     }

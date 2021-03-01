@@ -2,6 +2,7 @@ package io.rotlabs.postmanandroidclient.di
 
 import javax.inject.Scope
 
+@Scope
 @Retention(AnnotationRetention.SOURCE)
 annotation class ActivityScope
 
@@ -11,4 +12,4 @@ annotation class FragmentScope
 
 @Scope
 @Retention(AnnotationRetention.SOURCE)
-annotation class ViewModelScope
+annotation class ViewHolderScope

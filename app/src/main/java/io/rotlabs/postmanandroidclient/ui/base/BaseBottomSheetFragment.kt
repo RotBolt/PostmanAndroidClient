@@ -20,6 +20,8 @@ abstract class BaseBottomSheetFragment<B : ViewBinding, VM : BaseViewModel> :
     @Inject
     lateinit var viewModel: VM
 
+    protected lateinit var binding: B
+
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies(getFragmentComponent())
         super.onCreate(savedInstanceState)
@@ -32,7 +34,8 @@ abstract class BaseBottomSheetFragment<B : ViewBinding, VM : BaseViewModel> :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return initializeBinding(inflater, container).root
+        binding = initializeBinding(inflater, container)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

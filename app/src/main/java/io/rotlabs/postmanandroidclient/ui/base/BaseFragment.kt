@@ -19,6 +19,7 @@ abstract class BaseFragment<B : ViewBinding, VM : BaseViewModel> : Fragment() {
     @Inject
     lateinit var viewModel: VM
 
+    protected lateinit var binding: B
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies(getFragmentComponent())
@@ -32,7 +33,8 @@ abstract class BaseFragment<B : ViewBinding, VM : BaseViewModel> : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return initializeBinding(inflater, container).root
+        binding = initializeBinding(inflater, container)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

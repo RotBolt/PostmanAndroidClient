@@ -3,6 +3,11 @@ package io.rotlabs.postmanandroidclient.utils
 import io.rotlabs.postmanandroidclient.data.models.BodyInfo
 import io.rotlabs.postmanandroidclient.data.models.FormDataContent
 import io.rotlabs.postmanandroidclient.utils.network.MimeType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.Protocol
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.ResponseBody.Companion.toResponseBody
 import java.io.File
 
 class TestHelper {
@@ -41,5 +46,30 @@ class TestHelper {
             formDataContent.put("file", FormDataContent.FormDataFile(file, MimeType.TEXT))
         }
         return BodyInfo.FormDataBody(formDataContent)
+    }
+
+    fun getTestResponseBody() = "{\"test\":\"json\"}"
+
+
+    fun getTestSuccessResponse(request: Request): Response {
+        val responseBuilder = Response.Builder()
+        responseBuilder.request(request)
+        responseBuilder.protocol(Protocol.HTTP_2)
+        responseBuilder.message("Success")
+        getTestHeaders().forEach { (key, value) ->
+            responseBuilder.addHeader(key, value)
+        }
+        responseBuilder.code(200)
+        responseBuilder.body(getTestResponseBody().toResponseBody(MimeType.TEXT.type.toMediaTypeOrNull()))
+        return responseBuilder.build()
+    }
+
+    fun getTestFailedResponse(request: Request): Response {
+        val responseBuilder = Response.Builder()
+        responseBuilder.code(404)
+        responseBuilder.request(request)
+        responseBuilder.protocol(Protocol.HTTP_2)
+        responseBuilder.message("Not Found")
+        return responseBuilder.build()
     }
 }

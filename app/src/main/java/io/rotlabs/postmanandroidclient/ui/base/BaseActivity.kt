@@ -18,10 +18,13 @@ abstract class BaseActivity<B : ViewBinding, VM : BaseViewModel> : AppCompatActi
     @Inject
     lateinit var viewModel: VM
 
+    lateinit var binding: B
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependencies(getActivityComponent())
-        setContentView(provideActivityBinding().root)
+        binding = provideActivityBinding()
+        setContentView(binding.root)
         setupView(savedInstanceState)
         setupObservables()
         viewModel.onCreate()
