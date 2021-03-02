@@ -9,6 +9,8 @@ import io.rotlabs.postmanandroidclient.R
 import io.rotlabs.postmanandroidclient.databinding.FragmentAddKeyValueBinding
 import io.rotlabs.postmanandroidclient.di.component.FragmentComponent
 import io.rotlabs.postmanandroidclient.ui.base.BaseBottomSheetFragment
+import io.rotlabs.postmanandroidclient.ui.makeRequest.RequestConfigSharedViewModel
+import javax.inject.Inject
 
 class AddKeyValueBottomSheet :
     BaseBottomSheetFragment<FragmentAddKeyValueBinding, AddKeyValueViewModel>(),
@@ -16,21 +18,26 @@ class AddKeyValueBottomSheet :
 
     companion object {
         const val TAG = "AddKeyValueBottomSheet"
-        private const val ARG_IS_NEW = "isNew"
-        fun newInstance(isNew: Boolean): AddKeyValueBottomSheet {
+        private const val ARG_KEY_VALUE_CONFIG = "keyValueConfig"
+        private const val ARG_KEY_VALUE_TYPE = "keyValueType"
+        fun newInstance(
+            keyValueType: String,
+            keyValueConfig: KeyValueConfig?
+        ): AddKeyValueBottomSheet {
             val args = Bundle()
-            args.putBoolean(ARG_IS_NEW, isNew)
+            args.putString(ARG_KEY_VALUE_TYPE, keyValueType)
+            keyValueConfig?.let {
+                args.putSerializable(ARG_KEY_VALUE_CONFIG, it)
+            }
             val fragment = AddKeyValueBottomSheet()
             fragment.arguments = args
             return fragment
         }
     }
 
-    private lateinit var keyValueAddRemoveListener: KeyValueAddRemoveListener
+    @Inject
+    lateinit var requestConfigSharedViewModel: RequestConfigSharedViewModel
 
-    fun setKeyValueAddRemoveListener(listener: KeyValueAddRemoveListener) {
-        this.keyValueAddRemoveListener = listener
-    }
 
     override fun initializeBinding(
         inflater: LayoutInflater,
@@ -44,22 +51,28 @@ class AddKeyValueBottomSheet :
     }
 
     override fun setupView(savedInstanceState: Bundle?) {
-
-        val isNew = arguments?.getBoolean(ARG_IS_NEW) ?: true
-        if (isNew) {
-            binding.btnDeleteKeyValue.isVisible = false
-        } else {
-            binding.btnSaveKeyValue.isVisible = false
-        }
-
-        binding.btnDeleteKeyValue.setOnClickListener(this)
+        binding.tvAddConfigHeading.text = getKeyValueType()
         binding.btnSaveKeyValue.setOnClickListener(this)
+        setupKeyValueConfig()
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btnSaveKeyValue -> saveKeyValuePair()
-            R.id.btnDeleteKeyValue -> deleteKeyValuePair()
+        }
+    }
+
+    /**
+     *  setup the initial values if any to display to the user
+     */
+    private fun setupKeyValueConfig() {
+        val keyValueConfig = arguments?.getSerializable(ARG_KEY_VALUE_CONFIG) as KeyValueConfig?
+        keyValueConfig?.let { config ->
+            binding.apply {
+                etKey.setText(config.key)
+                etValue.setText(config.value)
+                etDescription.setText(config.description)
+            }
         }
     }
 
@@ -73,13 +86,37 @@ class AddKeyValueBottomSheet :
             return
         }
 
-        keyValueAddRemoveListener.addOrRemoveKeyValue(key, value, description, true)
+        when (getKeyValueType()) {
+            KeyValueType.HEADER -> {
+                requestConfigSharedViewModel.headerList.value?.add(
+                    KeyValueConfig(
+                        key,
+                        value,
+                        description,
+                        true
+                    )
+                )
+                requestConfigSharedViewModel.headerList.postValue(requestConfigSharedViewModel.headerList.value)
+            }
+            KeyValueType.QUERY_PARAM -> {
+                requestConfigSharedViewModel.paramList.value?.add(
+                    KeyValueConfig(
+                        key,
+                        value,
+                        description,
+                        true
+                    )
+                )
+                requestConfigSharedViewModel.paramList.postValue(requestConfigSharedViewModel.paramList.value)
+            }
+        }
 
+        dismiss()
         // TODO call viewModel to save the config in local store
 
     }
 
-    private fun deleteKeyValuePair() {
-        // TODO use the loaded key value pair to delete from local
+    private fun getKeyValueType(): String {
+        return arguments?.getString(ARG_KEY_VALUE_TYPE)!!
     }
 }

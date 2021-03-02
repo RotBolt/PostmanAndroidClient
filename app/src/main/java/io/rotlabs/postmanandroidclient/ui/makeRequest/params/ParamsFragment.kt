@@ -1,26 +1,27 @@
 package io.rotlabs.postmanandroidclient.ui.makeRequest.params
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.rotlabs.postmanandroidclient.R
 import io.rotlabs.postmanandroidclient.databinding.FragmentParamsHeadersBinding
 import io.rotlabs.postmanandroidclient.di.component.FragmentComponent
 import io.rotlabs.postmanandroidclient.ui.base.BaseFragment
-import io.rotlabs.postmanandroidclient.ui.makeRequest.addKeyValue.AddKeyValueBottomSheet
-import io.rotlabs.postmanandroidclient.ui.makeRequest.addKeyValue.KeyValueAddRemoveListener
+import io.rotlabs.postmanandroidclient.ui.makeRequest.RequestConfigSharedViewModel
+import io.rotlabs.postmanandroidclient.ui.makeRequest.addKeyValue.*
+import javax.inject.Inject
 
 
 class ParamsFragment : BaseFragment<FragmentParamsHeadersBinding, ParamsViewModel>(),
-    View.OnClickListener, KeyValueAddRemoveListener {
+    View.OnClickListener, KeyValueIncludeChangeListener, KeyValueDeleteListener {
 
+    @Inject
+    lateinit var requestConfigSharedViewModel: RequestConfigSharedViewModel
 
-    private lateinit var keyValueAddRemoveListener: KeyValueAddRemoveListener
-
-    fun setKeyValueAddRemoveListener(listener: KeyValueAddRemoveListener) {
-        this.keyValueAddRemoveListener = listener
-    }
+    lateinit var addKeyValueAdapter: AddKeyValueAdapter
 
     override fun initializeBinding(
         inflater: LayoutInflater,
@@ -35,6 +36,15 @@ class ParamsFragment : BaseFragment<FragmentParamsHeadersBinding, ParamsViewMode
 
     override fun setupView(savedInstanceState: Bundle?) {
         setupBtnAddKeyValueConfig()
+        setupParamsRecyclerView()
+    }
+
+    override fun setupObservables() {
+        super.setupObservables()
+        requestConfigSharedViewModel.paramList.observe(this, {
+            Log.d("PUI", "keyValueList $it")
+            addKeyValueAdapter.updateData(it)
+        })
     }
 
     override fun onClick(v: View?) {
@@ -50,20 +60,47 @@ class ParamsFragment : BaseFragment<FragmentParamsHeadersBinding, ParamsViewMode
         binding.btnAddKeyValueConfig.setOnClickListener(this)
     }
 
+    private fun setupParamsRecyclerView() {
+        binding.rvKeyValueConfigs.apply {
+            // TODO fetch list from local store
+            addKeyValueAdapter = AddKeyValueAdapter(
+                this@ParamsFragment,
+                arrayListOf(),
+                this@ParamsFragment,
+                this@ParamsFragment,
+                childFragmentManager,
+                KeyValueType.QUERY_PARAM
+            )
+            adapter = addKeyValueAdapter
+            layoutManager =
+                LinearLayoutManager(
+                    this@ParamsFragment.requireContext(),
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
+        }
+    }
+
     private fun showAddKeyValueBottomSheet() {
-        val fragment = AddKeyValueBottomSheet.newInstance(true)
-        fragment.setKeyValueAddRemoveListener(this)
+        val fragment = AddKeyValueBottomSheet.newInstance(KeyValueType.QUERY_PARAM, null)
         fragment.show(childFragmentManager, AddKeyValueBottomSheet.TAG)
     }
 
-    override fun addOrRemoveKeyValue(
-        key: String,
-        value: String,
-        description: String,
-        toAdd: Boolean
-    ) {
-        // add item to adapter
-        keyValueAddRemoveListener.addOrRemoveKeyValue(key, value, description, toAdd)
+    override fun onKeyValueIncludeChange(keyValueConfig: KeyValueConfig, position: Int) {
+        Log.d("PUI", "onKeyValueChange")
+
+        addKeyValueAdapter.dataList[position] = keyValueConfig
+        requestConfigSharedViewModel.paramList.postValue(addKeyValueAdapter.dataList)
+
+
     }
+
+    override fun onDeleteKeyValueConfig(keyValueConfig: KeyValueConfig, position: Int) {
+        addKeyValueAdapter.dataList.removeAt(position)
+        addKeyValueAdapter.notifyDataSetChanged()
+        requestConfigSharedViewModel.paramList.value?.remove(keyValueConfig)
+        requestConfigSharedViewModel.paramList.postValue(requestConfigSharedViewModel.paramList.value)
+    }
+
 
 }

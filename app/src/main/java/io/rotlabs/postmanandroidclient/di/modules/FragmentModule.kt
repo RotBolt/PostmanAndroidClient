@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
+import io.rotlabs.postmanandroidclient.ui.base.BaseActivity
+import io.rotlabs.postmanandroidclient.ui.makeRequest.RequestConfigSharedViewModel
+import io.rotlabs.postmanandroidclient.ui.makeRequest.addKeyValue.AddKeyValueViewModel
 import io.rotlabs.postmanandroidclient.ui.makeRequest.params.ParamsViewModel
 import io.rotlabs.postmanandroidclient.utils.ViewModelProviderFactory
 import io.rotlabs.postmanandroidclient.utils.error.ErrorHelper
@@ -31,5 +34,32 @@ class FragmentModule {
                 connectivityChecker
             )
         }).get(ParamsViewModel::class.java)
+    }
+
+    @Provides
+    fun provideRequestConfigSharedViewModel(fragment: Fragment): RequestConfigSharedViewModel {
+        return ViewModelProvider(
+            fragment.requireActivity(),
+            ViewModelProviderFactory(RequestConfigSharedViewModel::class) {
+                RequestConfigSharedViewModel()
+            }).get(RequestConfigSharedViewModel::class.java)
+    }
+
+    @Provides
+    fun provideAddKeyValueViewModel(
+        fragment: Fragment,
+        schedulerProvider: SchedulerProvider,
+        compositeDisposable: CompositeDisposable,
+        errorHelper: ErrorHelper,
+        connectivityChecker: ConnectivityChecker
+    ): AddKeyValueViewModel {
+        return ViewModelProvider(fragment, ViewModelProviderFactory(AddKeyValueViewModel::class) {
+            AddKeyValueViewModel(
+                schedulerProvider,
+                compositeDisposable,
+                errorHelper,
+                connectivityChecker
+            )
+        }).get(AddKeyValueViewModel::class.java)
     }
 }

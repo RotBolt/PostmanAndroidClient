@@ -36,6 +36,9 @@ abstract class BaseItemViewHolder<T : Any, VM : BaseItemViewModel<T>>(
     @Inject
     lateinit var viewModel: VM
 
+    init {
+        onCreate()
+    }
 
     /**
      * Marks LifeCycle Created for this ViewHolder

@@ -7,9 +7,9 @@
     android:orientation="vertical">
 
 
-<!--    Cannot give Ids to tab item in Material tab layout
-        Issue link: https://github.com/material-components/material-components-android/issues/1162
--->
+    <!--    Cannot give Ids to tab item in Material tab layout
+            Issue link: https://github.com/material-components/material-components-android/issues/1162
+    -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/requestConfigTabContainer"
         android:layout_width="match_parent"
@@ -40,8 +40,8 @@
     </com.google.android.material.tabs.TabLayout>
 
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainer"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/requestConfigPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

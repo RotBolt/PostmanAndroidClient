@@ -1,5 +1,6 @@
 package io.rotlabs.postmanandroidclient.ui.base
 
+import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -82,9 +83,10 @@ abstract class BaseAdapter<T : Any, VH : BaseItemViewHolder<T, out BaseItemViewM
         })
     }
 
-    override fun getItemCount(): Int = dataList.size
+    override fun getItemCount(): Int = this.dataList.size
 
     override fun onBindViewHolder(holder: VH, position: Int) {
+        Log.d("PUI", "onBind $position")
         holder.bind(dataList[position])
     }
 
@@ -132,9 +134,14 @@ abstract class BaseAdapter<T : Any, VH : BaseItemViewHolder<T, out BaseItemViewM
     /**
      *  helper function to clear the current list and set new list
      */
-    fun updateData(dataList: List<T>) {
+    fun updateData(newList: List<T>) {
+        // newList could also be reference to this.dataList as well
+        val updatedList = arrayListOf<T>()
+        updatedList.addAll(newList)
+        Log.d("PUI", "updateData newList size ${newList.size}")
         this.dataList.clear()
-        this.dataList.addAll(dataList)
+        this.dataList.addAll(updatedList)
+        Log.d("PUI", "updatedata datalist ${this.dataList.size}, newList ${dataList.size}")
         notifyDataSetChanged()
     }
 }

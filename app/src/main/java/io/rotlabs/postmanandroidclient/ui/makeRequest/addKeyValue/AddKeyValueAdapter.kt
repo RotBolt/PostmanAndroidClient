@@ -10,12 +10,13 @@ import io.rotlabs.postmanandroidclient.utils.common.OnDeleteAdapterItemListener
 
 class AddKeyValueAdapter(
     parent: LifecycleOwner,
-    private val dataList: ArrayList<KeyValueConfig>,
-    private val keyValueAddRemoveListener: KeyValueAddRemoveListener,
-    private val fragmentManager: FragmentManager
+    val dataList: ArrayList<KeyValueConfig>,
+    private val keyValueIncludeChangeListener: KeyValueIncludeChangeListener,
+    private val keyValueDeleteListener: KeyValueDeleteListener,
+    private val fragmentManager: FragmentManager,
+    private val keyValueType: String
 ) :
-    BaseAdapter<KeyValueConfig, AddKeyValueViewHolder>(parent.lifecycle, dataList),
-    OnDeleteAdapterItemListener {
+    BaseAdapter<KeyValueConfig, AddKeyValueViewHolder>(parent.lifecycle, dataList) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddKeyValueViewHolder {
         return AddKeyValueViewHolder(
             ItemKeyValueConfigBinding.inflate(
@@ -23,14 +24,11 @@ class AddKeyValueAdapter(
                 parent,
                 false
             ),
-            keyValueAddRemoveListener,
-            this,
-            fragmentManager
+            keyValueIncludeChangeListener,
+            keyValueDeleteListener,
+            fragmentManager,
+            keyValueType
         )
     }
 
-    override fun deleteItem(position: Int) {
-        dataList.removeAt(position)
-        notifyItemRemoved(position)
-    }
 }

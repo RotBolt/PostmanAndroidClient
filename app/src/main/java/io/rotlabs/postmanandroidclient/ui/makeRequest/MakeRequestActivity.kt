@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
+import com.google.android.material.tabs.TabLayoutMediator
 import io.rotlabs.postmanandroidclient.R
 import io.rotlabs.postmanandroidclient.data.models.AuthInfo
 import io.rotlabs.postmanandroidclient.data.models.BodyInfo
@@ -19,11 +20,14 @@ import io.rotlabs.postmanandroidclient.di.component.ActivityComponent
 import io.rotlabs.postmanandroidclient.ui.base.BaseActivity
 import io.rotlabs.postmanandroidclient.utils.common.registerTextChange
 import java.util.*
+import javax.inject.Inject
 import kotlin.random.Random
 
 class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequestViewModel>(),
     View.OnFocusChangeListener, AdapterView.OnItemSelectedListener, View.OnClickListener {
 
+    @Inject
+    lateinit var requestConfigSharedViewModel: RequestConfigSharedViewModel
 
     /**
      *  holds the current selected Request Method to be used
@@ -54,12 +58,12 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
     /**
      *  holds the query params required to make the current request
      */
-    private var currentQueryParams = mutableMapOf<String, String>()
+    private val currentQueryParams = mutableMapOf<String, String>()
 
     /**
      *  holds the headers required to make the current request
      */
-    private var currentHeaders = mutableMapOf<String, String>()
+    private val currentHeaders = mutableMapOf<String, String>()
 
     override fun provideActivityBinding(): ActivityMakeRequestBinding {
         return ActivityMakeRequestBinding.inflate(layoutInflater)
@@ -72,6 +76,7 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
     override fun setupView(savedInstanceState: Bundle?) {
         setupRequestUrlEditText()
         setupRequestTypeSpinner()
+        setupRequestConfigTabs()
 
         binding.btnSend.setOnClickListener(this)
         binding.btnResponse.setOnClickListener(this)
@@ -81,6 +86,43 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
         when (v?.id) {
             R.id.etRequestUrl -> onRequestUrlFocusChange(hasFocus)
         }
+    }
+
+    override fun setupObservables() {
+        super.setupObservables()
+        requestConfigSharedViewModel.paramList.observe(this, { list ->
+            currentQueryParams.clear()
+            list.forEach {
+                if (it.toInclude) {
+                    currentQueryParams[it.key] = it.value
+                }
+            }
+            Log.d("PUI", "paramMap $currentQueryParams")
+        })
+
+        requestConfigSharedViewModel.headerList.observe(this, { list ->
+            currentHeaders.clear()
+            list.forEach {
+                if (it.toInclude) {
+                    currentHeaders[it.key] = it.value
+                }
+            }
+        })
+    }
+
+    private fun setupRequestConfigTabs() {
+        binding.requestConfigTabLayout.requestConfigPager.adapter = RequestConfigsAdapter(this)
+        TabLayoutMediator(
+            binding.requestConfigTabLayout.requestConfigTabContainer,
+            binding.requestConfigTabLayout.requestConfigPager
+        ) { tab, position ->
+            when (position) {
+                0 -> tab.text = "Params"
+                1 -> tab.text = "Authorization"
+                2 -> tab.text = "Headers"
+                3 -> tab.text = "Body"
+            }
+        }.attach()
     }
 
     /**

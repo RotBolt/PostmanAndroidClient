@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tvAddConfigHeading"
@@ -19,17 +19,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Add Header" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnDeleteKeyValue"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_8"
-        android:layout_marginEnd="@dimen/margin_8"
-        android:text="Delete"
-        android:textColor="@color/colorRed"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSaveKeyValue"
@@ -40,7 +29,7 @@
         android:layout_marginEnd="@dimen/margin_8"
         android:text="Save"
         android:textColor="@color/colorBlue"
-        app:layout_constraintEnd_toStartOf="@id/btnDeleteKeyValue"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
@@ -50,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_16"
         android:hint="Key"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvAddConfigHeading" />
@@ -61,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_16"
         android:hint="Value"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etKey" />
@@ -70,10 +61,16 @@
         style="@style/Theme.PostmanAndroidClient.InputField.Outlined"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_16"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_16"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:layout_marginBottom="64dp"
         android:hint="Description"
+        android:singleLine="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etValue" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

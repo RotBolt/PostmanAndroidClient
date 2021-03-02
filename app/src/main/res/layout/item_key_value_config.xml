@@ -47,10 +47,10 @@
         android:background="@color/greyLight" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivEdit"
+        android:id="@+id/ivDelete"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:src="@drawable/ic_create" />
+        android:src="@drawable/ic_close" />
 
 </LinearLayout>

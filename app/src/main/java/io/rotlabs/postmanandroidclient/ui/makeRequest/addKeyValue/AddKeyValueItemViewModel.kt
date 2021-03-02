@@ -1,6 +1,7 @@
 package io.rotlabs.postmanandroidclient.ui.makeRequest.addKeyValue
 
 import io.reactivex.disposables.CompositeDisposable
+import io.rotlabs.postmanandroidclient.ui.base.BaseItemViewModel
 import io.rotlabs.postmanandroidclient.ui.base.BaseViewModel
 import io.rotlabs.postmanandroidclient.utils.error.ErrorHelper
 import io.rotlabs.postmanandroidclient.utils.network.ConnectivityChecker
@@ -12,7 +13,7 @@ class AddKeyValueItemViewModel @Inject constructor(
     private val compositeDisposable: CompositeDisposable,
     errorHelper: ErrorHelper,
     connectivityChecker: ConnectivityChecker
-) : BaseViewModel(
+) : BaseItemViewModel<KeyValueConfig>(
     schedulerProvider, compositeDisposable, errorHelper, connectivityChecker
 ) {
     override fun onCreate() {
