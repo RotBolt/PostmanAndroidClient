@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import io.rotlabs.postmanandroidclient.databinding.FragmentParamsBinding
 import io.rotlabs.postmanandroidclient.di.component.FragmentComponent
 import io.rotlabs.postmanandroidclient.ui.base.BaseFragment
-import io.rotlabs.postmanandroidclient.ui.makeRequest.RequestConfigSharedViewModel
+import io.rotlabs.postmanandroidclient.ui.makeRequest.MakeRequestSharedViewModel
 import io.rotlabs.postmanandroidclient.ui.makeRequest.addKeyValue.KeyValueType
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class ParamsFragment : BaseFragment<FragmentParamsBinding, ParamsViewModel>() {
 
     @Inject
-    lateinit var requestConfigSharedViewModel: RequestConfigSharedViewModel
+    lateinit var requestConfigSharedViewModel: MakeRequestSharedViewModel
 
 
     override fun initializeBinding(

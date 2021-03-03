@@ -36,15 +36,11 @@
         <item name="android:background">@color/edit_text_bg_color</item>
         <item name="android:textColor">@android:color/black</item>
         <item name="android:padding">@dimen/margin_8</item>
+        <item name="android:singleLine">true</item>
         <item name="android:gravity">center_vertical</item>
     </style>
 
-    <style name="Theme.PostmanAndroidClient.InputField.Outlined">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColorHint">@color/greyShimmerLight</item>
+    <style name="Theme.PostmanAndroidClient.InputField.Outlined" parent="Theme.PostmanAndroidClient.InputField">
         <item name="android:background">@drawable/text_field_bg</item>
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:padding">@dimen/margin_8</item>
-        <item name="android:gravity">center_vertical</item>
     </style>
 </resources>

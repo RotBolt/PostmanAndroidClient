@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
 import io.rotlabs.postmanandroidclient.R
 import io.rotlabs.postmanandroidclient.databinding.FragmentAddKeyValueBinding
 import io.rotlabs.postmanandroidclient.di.component.FragmentComponent
 import io.rotlabs.postmanandroidclient.ui.base.BaseBottomSheetFragment
-import io.rotlabs.postmanandroidclient.ui.makeRequest.RequestConfigSharedViewModel
 import javax.inject.Inject
 
 class AddKeyValueBottomSheet :

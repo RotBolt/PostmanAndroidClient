@@ -1,11 +1,7 @@
 package io.rotlabs.postmanandroidclient.ui.makeRequest
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -21,13 +17,12 @@ import io.rotlabs.postmanandroidclient.ui.base.BaseActivity
 import io.rotlabs.postmanandroidclient.utils.common.registerTextChange
 import java.util.*
 import javax.inject.Inject
-import kotlin.random.Random
 
 class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequestViewModel>(),
     View.OnFocusChangeListener, AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     @Inject
-    lateinit var requestConfigSharedViewModel: RequestConfigSharedViewModel
+    lateinit var makeRequestSharedViewModel: MakeRequestSharedViewModel
 
     /**
      *  holds the current selected Request Method to be used
@@ -90,23 +85,36 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
 
     override fun setupObservables() {
         super.setupObservables()
-        requestConfigSharedViewModel.paramList.observe(this, { list ->
+
+        viewModel.response.observe(this, {
+            makeRequestSharedViewModel.response.postValue(it)
+        })
+
+        makeRequestSharedViewModel.paramList.observe(this, { list ->
             currentQueryParams.clear()
             list.forEach {
                 if (it.toInclude) {
                     currentQueryParams[it.key] = it.value
                 }
             }
-            Log.d("PUI", "paramMap $currentQueryParams")
         })
 
-        requestConfigSharedViewModel.headerList.observe(this, { list ->
+        makeRequestSharedViewModel.headerList.observe(this, { list ->
             currentHeaders.clear()
             list.forEach {
                 if (it.toInclude) {
                     currentHeaders[it.key] = it.value
                 }
             }
+        })
+
+        makeRequestSharedViewModel.authInfo.observe(this, {
+            Log.d("PUI","authInfo in activity $it")
+            currentAuthInfo = it
+        })
+
+        makeRequestSharedViewModel.bodyInfo.observe(this, {
+            currentBodyInfo = it
         })
 
         viewModel.malformedUrl.observe(this, {
@@ -196,9 +204,10 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
                     currentHeaders,
                     currentBodyInfo
                 )
+                // TODO open Response Bottom Sheet
             }
             R.id.btnResponse -> {
-                // open bottom sheet
+                // TODO open bottom sheet
             }
         }
     }

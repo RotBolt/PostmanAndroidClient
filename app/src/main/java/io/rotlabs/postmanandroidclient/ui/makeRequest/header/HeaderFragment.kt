@@ -3,11 +3,10 @@ package io.rotlabs.postmanandroidclient.ui.makeRequest.header
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import io.rotlabs.postmanandroidclient.databinding.FragmentHeadersBinding
 import io.rotlabs.postmanandroidclient.di.component.FragmentComponent
 import io.rotlabs.postmanandroidclient.ui.base.BaseFragment
-import io.rotlabs.postmanandroidclient.ui.makeRequest.RequestConfigSharedViewModel
+import io.rotlabs.postmanandroidclient.ui.makeRequest.MakeRequestSharedViewModel
 import io.rotlabs.postmanandroidclient.ui.makeRequest.addKeyValue.KeyValueType
 import javax.inject.Inject
 
@@ -16,7 +15,7 @@ class HeaderFragment : BaseFragment<FragmentHeadersBinding, HeaderViewModel>() {
 
 
     @Inject
-    lateinit var requestConfigSharedViewModel: RequestConfigSharedViewModel
+    lateinit var requestConfigSharedViewModel: MakeRequestSharedViewModel
 
     override fun initializeBinding(
         inflater: LayoutInflater,

@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
-import io.rotlabs.postmanandroidclient.ui.base.BaseActivity
-import io.rotlabs.postmanandroidclient.ui.makeRequest.RequestConfigSharedViewModel
+import io.rotlabs.postmanandroidclient.ui.makeRequest.MakeRequestSharedViewModel
 import io.rotlabs.postmanandroidclient.ui.makeRequest.addKeyValue.AddKeyValueViewModel
+import io.rotlabs.postmanandroidclient.ui.makeRequest.auth.AuthInfoViewModel
 import io.rotlabs.postmanandroidclient.ui.makeRequest.header.HeaderViewModel
 import io.rotlabs.postmanandroidclient.ui.makeRequest.params.ParamsViewModel
 import io.rotlabs.postmanandroidclient.utils.ViewModelProviderFactory
@@ -57,12 +57,30 @@ class FragmentModule {
     }
 
     @Provides
-    fun provideRequestConfigSharedViewModel(fragment: Fragment): RequestConfigSharedViewModel {
+    fun provideAuthInfoViewModel(
+        fragment: Fragment,
+        schedulerProvider: SchedulerProvider,
+        compositeDisposable: CompositeDisposable,
+        errorHelper: ErrorHelper,
+        connectivityChecker: ConnectivityChecker
+    ): AuthInfoViewModel {
+        return ViewModelProvider(fragment, ViewModelProviderFactory(AuthInfoViewModel::class) {
+            AuthInfoViewModel(
+                schedulerProvider,
+                compositeDisposable,
+                errorHelper,
+                connectivityChecker
+            )
+        }).get(AuthInfoViewModel::class.java)
+    }
+
+    @Provides
+    fun provideMakeRequestSharedViewModel(fragment: Fragment): MakeRequestSharedViewModel {
         return ViewModelProvider(
             fragment.requireActivity(),
-            ViewModelProviderFactory(RequestConfigSharedViewModel::class) {
-                RequestConfigSharedViewModel()
-            }).get(RequestConfigSharedViewModel::class.java)
+            ViewModelProviderFactory(MakeRequestSharedViewModel::class) {
+                MakeRequestSharedViewModel()
+            }).get(MakeRequestSharedViewModel::class.java)
     }
 
     @Provides

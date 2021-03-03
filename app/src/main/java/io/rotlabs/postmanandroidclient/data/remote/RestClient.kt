@@ -127,10 +127,12 @@ class RestClient @Inject constructor(private val httpClient: OkHttpClient) {
             }
 
             is AuthInfo.ApiKeyAuthInfo -> {
-                if (authInfo.isHeader) {
-                    requestBuilder.addHeader(authInfo.key, authInfo.value)
-                } else {
-                    queryParams[authInfo.key] = authInfo.value
+                if (authInfo.key.isNotEmpty()) {
+                    if (authInfo.isHeader) {
+                        requestBuilder.addHeader(authInfo.key, authInfo.value)
+                    } else {
+                        queryParams[authInfo.key] = authInfo.value
+                    }
                 }
             }
 

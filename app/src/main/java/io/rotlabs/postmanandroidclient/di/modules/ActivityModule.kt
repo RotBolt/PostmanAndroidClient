@@ -7,7 +7,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.rotlabs.postmanandroidclient.data.remote.RestClient
 import io.rotlabs.postmanandroidclient.ui.base.BaseActivity
 import io.rotlabs.postmanandroidclient.ui.makeRequest.MakeRequestViewModel
-import io.rotlabs.postmanandroidclient.ui.makeRequest.RequestConfigSharedViewModel
+import io.rotlabs.postmanandroidclient.ui.makeRequest.MakeRequestSharedViewModel
 import io.rotlabs.postmanandroidclient.utils.ViewModelProviderFactory
 import io.rotlabs.postmanandroidclient.utils.error.ErrorHelper
 import io.rotlabs.postmanandroidclient.utils.network.ConnectivityChecker
@@ -37,12 +37,12 @@ class ActivityModule {
     }
 
     @Provides
-    fun provideRequestConfigSharedViewModel(activity: BaseActivity<*, *>): RequestConfigSharedViewModel {
+    fun provideMakeRequestSharedViewModel(activity: BaseActivity<*, *>): MakeRequestSharedViewModel {
         return ViewModelProvider(
             activity,
-            ViewModelProviderFactory(RequestConfigSharedViewModel::class) {
-                RequestConfigSharedViewModel()
-            }).get(RequestConfigSharedViewModel::class.java)
+            ViewModelProviderFactory(MakeRequestSharedViewModel::class) {
+                MakeRequestSharedViewModel()
+            }).get(MakeRequestSharedViewModel::class.java)
     }
 
 }

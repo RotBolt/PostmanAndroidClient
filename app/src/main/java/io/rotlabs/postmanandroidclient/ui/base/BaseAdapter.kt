@@ -138,10 +138,8 @@ abstract class BaseAdapter<T : Any, VH : BaseItemViewHolder<T, out BaseItemViewM
         // newList could also be reference to this.dataList as well
         val updatedList = arrayListOf<T>()
         updatedList.addAll(newList)
-        Log.d("PUI", "updateData newList size ${newList.size}")
         this.dataList.clear()
         this.dataList.addAll(updatedList)
-        Log.d("PUI", "updatedata datalist ${this.dataList.size}, newList ${dataList.size}")
         notifyDataSetChanged()
     }
 }
