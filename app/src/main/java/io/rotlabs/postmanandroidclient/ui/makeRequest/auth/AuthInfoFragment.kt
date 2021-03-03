@@ -21,6 +21,7 @@ import io.rotlabs.postmanandroidclient.di.component.FragmentComponent
 import io.rotlabs.postmanandroidclient.ui.base.BaseFragment
 import io.rotlabs.postmanandroidclient.ui.makeRequest.MakeRequestSharedViewModel
 import io.rotlabs.postmanandroidclient.utils.common.applySearchRxOpeations
+import io.rotlabs.postmanandroidclient.utils.common.hideSoftKeyboard
 import io.rotlabs.postmanandroidclient.utils.common.registerTextChange
 import io.rotlabs.postmanandroidclient.utils.rx.SchedulerProvider
 import java.util.*
@@ -88,6 +89,10 @@ class AuthInfoFragment : BaseFragment<FragmentAuthInfoBinding, AuthInfoViewModel
                         },
                         {
                             showToast(it.message ?: "Oops")
+                        },
+                        {
+                            requireActivity().hideSoftKeyboard()
+                            etAuthApiKeyValue.clearFocus()
                         }
                     )
             )
@@ -106,6 +111,10 @@ class AuthInfoFragment : BaseFragment<FragmentAuthInfoBinding, AuthInfoViewModel
                     },
                     {
                         showToast(it.message ?: "Oops")
+                    },
+                    {
+                        requireActivity().hideSoftKeyboard()
+                        binding.authInfoTokenContainer.etAuthToken.clearFocus()
                     }
                 )
         )
@@ -140,6 +149,9 @@ class AuthInfoFragment : BaseFragment<FragmentAuthInfoBinding, AuthInfoViewModel
                         },
                         {
                             showToast(it.message ?: "Oops")
+                        }, {
+                            requireActivity().hideSoftKeyboard()
+                            etAuthBasicPassword.clearFocus()
                         }
                     )
             )

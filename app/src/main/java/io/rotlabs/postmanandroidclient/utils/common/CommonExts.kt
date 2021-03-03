@@ -1,10 +1,14 @@
 package io.rotlabs.postmanandroidclient.utils.common
 
+import android.app.Activity
+import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.rotlabs.postmanandroidclient.utils.rx.SchedulerProvider
@@ -51,4 +55,13 @@ fun Observable<String>.applySearchRxOpeations(schedulerProvider: SchedulerProvid
         .switchMap { Observable.just(it) }
         .subscribeOn(schedulerProvider.ui())
         .observeOn(schedulerProvider.ui())
+}
+
+
+fun Activity.hideSoftKeyboard() {
+    val view = this.currentFocus
+    view?.let { v ->
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        imm?.hideSoftInputFromWindow(v.windowToken, 0)
+    }
 }

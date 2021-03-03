@@ -18,6 +18,7 @@ import io.rotlabs.postmanandroidclient.di.component.ActivityComponent
 import io.rotlabs.postmanandroidclient.ui.base.BaseActivity
 import io.rotlabs.postmanandroidclient.utils.common.Toaster
 import io.rotlabs.postmanandroidclient.utils.common.applySearchRxOpeations
+import io.rotlabs.postmanandroidclient.utils.common.hideSoftKeyboard
 import io.rotlabs.postmanandroidclient.utils.common.registerTextChange
 import io.rotlabs.postmanandroidclient.utils.rx.SchedulerProvider
 import java.util.*
@@ -193,6 +194,9 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
                     },
                     {
                         showToast(it.message ?: "Oops")
+                    }, {
+                        hideSoftKeyboard()
+                        binding.etRequestUrl.clearFocus()
                     }
                 )
         )
