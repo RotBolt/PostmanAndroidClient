@@ -10,6 +10,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.core.view.isVisible
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.rotlabs.postmanandroidclient.R
 import io.rotlabs.postmanandroidclient.data.models.AuthInfo
 import io.rotlabs.postmanandroidclient.data.models.AuthType
@@ -18,8 +20,11 @@ import io.rotlabs.postmanandroidclient.databinding.FragmentAuthInfoBinding
 import io.rotlabs.postmanandroidclient.di.component.FragmentComponent
 import io.rotlabs.postmanandroidclient.ui.base.BaseFragment
 import io.rotlabs.postmanandroidclient.ui.makeRequest.MakeRequestSharedViewModel
+import io.rotlabs.postmanandroidclient.utils.common.applySearchRxOpeations
 import io.rotlabs.postmanandroidclient.utils.common.registerTextChange
+import io.rotlabs.postmanandroidclient.utils.rx.SchedulerProvider
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class AuthInfoFragment : BaseFragment<FragmentAuthInfoBinding, AuthInfoViewModel>(),
@@ -29,6 +34,12 @@ class AuthInfoFragment : BaseFragment<FragmentAuthInfoBinding, AuthInfoViewModel
     lateinit var makeRequestSharedViewModel: MakeRequestSharedViewModel
 
     private var currentAuthInfo: AuthInfo = AuthInfo.NoAuth()
+
+    @Inject
+    lateinit var compositeDisposable: CompositeDisposable
+
+    @Inject
+    lateinit var schedulerProvider: SchedulerProvider
 
 
     override fun initializeBinding(
@@ -53,35 +64,86 @@ class AuthInfoFragment : BaseFragment<FragmentAuthInfoBinding, AuthInfoViewModel
         setAuthApiKeySpinner()
         binding.authInfoApiKeyContainer.apply {
 
-            etAuthApiKeyKey.registerTextChange { s, start, before, count ->
-                (currentAuthInfo as AuthInfo.ApiKeyAuthInfo).key = s.toString()
-                makeRequestSharedViewModel.authInfo.postValue(currentAuthInfo)
-            }
+            compositeDisposable.add(
+                etAuthApiKeyKey.registerTextChange()
+                    .applySearchRxOpeations(schedulerProvider)
+                    .subscribe(
+                        {
+                            (currentAuthInfo as AuthInfo.ApiKeyAuthInfo).key = it
+                            makeRequestSharedViewModel.authInfo.postValue(currentAuthInfo)
+                        },
+                        {
+                            showToast(it.message ?: "Oops")
+                        }
+                    )
+            )
 
-            etAuthApiKeyValue.registerTextChange { s, start, before, count ->
-                (currentAuthInfo as AuthInfo.ApiKeyAuthInfo).value = s.toString()
-                makeRequestSharedViewModel.authInfo.postValue(currentAuthInfo)
-            }
+            compositeDisposable.add(
+                etAuthApiKeyValue.registerTextChange()
+                    .applySearchRxOpeations(schedulerProvider)
+                    .subscribe(
+                        {
+                            (currentAuthInfo as AuthInfo.ApiKeyAuthInfo).value = it
+                            makeRequestSharedViewModel.authInfo.postValue(currentAuthInfo)
+                        },
+                        {
+                            showToast(it.message ?: "Oops")
+                        }
+                    )
+            )
+
         }
     }
 
     private fun setupAuthTokenContainer() {
-        binding.authInfoTokenContainer.etAuthToken.registerTextChange { s, start, before, count ->
-            (currentAuthInfo as AuthInfo.BearerTokenInfo).token = s.toString()
-            makeRequestSharedViewModel.authInfo.postValue(currentAuthInfo)
-        }
+        compositeDisposable.add(
+            binding.authInfoTokenContainer.etAuthToken.registerTextChange()
+                .applySearchRxOpeations(schedulerProvider)
+                .subscribe(
+                    {
+                        (currentAuthInfo as AuthInfo.BearerTokenInfo).token = it
+                        makeRequestSharedViewModel.authInfo.postValue(currentAuthInfo)
+                    },
+                    {
+                        showToast(it.message ?: "Oops")
+                    }
+                )
+        )
+
     }
 
     private fun setupAuthBasicContainer() {
         binding.authInfoBasicContainer.apply {
-            etAuthBasicUsername.registerTextChange { s, start, before, count ->
-                (currentAuthInfo as AuthInfo.BasicAuthInfo).login = s.toString()
-                makeRequestSharedViewModel.authInfo.postValue(currentAuthInfo)
-            }
-            etAuthBasicPassword.registerTextChange { s, start, before, count ->
-                (currentAuthInfo as AuthInfo.BasicAuthInfo).password = s.toString()
-                makeRequestSharedViewModel.authInfo.postValue(currentAuthInfo)
-            }
+
+            compositeDisposable.add(
+                etAuthBasicUsername.registerTextChange()
+                    .applySearchRxOpeations(schedulerProvider)
+                    .subscribe(
+                        {
+                            (currentAuthInfo as AuthInfo.BasicAuthInfo).login = it
+                            makeRequestSharedViewModel.authInfo.postValue(currentAuthInfo)
+                        },
+                        {
+                            showToast(it.message ?: "Oops")
+                        }
+                    )
+            )
+
+
+            compositeDisposable.add(
+                etAuthBasicPassword.registerTextChange()
+                    .applySearchRxOpeations(schedulerProvider)
+                    .subscribe(
+                        {
+                            (currentAuthInfo as AuthInfo.BasicAuthInfo).password = it
+                            makeRequestSharedViewModel.authInfo.postValue(currentAuthInfo)
+                        },
+                        {
+                            showToast(it.message ?: "Oops")
+                        }
+                    )
+            )
+
 
             showPasswordCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
@@ -206,5 +268,10 @@ class AuthInfoFragment : BaseFragment<FragmentAuthInfoBinding, AuthInfoViewModel
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
 
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        compositeDisposable.clear()
     }
 }

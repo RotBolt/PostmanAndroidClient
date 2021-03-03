@@ -7,6 +7,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import com.google.android.material.tabs.TabLayoutMediator
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.rotlabs.postmanandroidclient.R
 import io.rotlabs.postmanandroidclient.data.models.AuthInfo
 import io.rotlabs.postmanandroidclient.data.models.BodyInfo
@@ -14,8 +16,12 @@ import io.rotlabs.postmanandroidclient.data.models.RequestMethod
 import io.rotlabs.postmanandroidclient.databinding.ActivityMakeRequestBinding
 import io.rotlabs.postmanandroidclient.di.component.ActivityComponent
 import io.rotlabs.postmanandroidclient.ui.base.BaseActivity
+import io.rotlabs.postmanandroidclient.utils.common.Toaster
+import io.rotlabs.postmanandroidclient.utils.common.applySearchRxOpeations
 import io.rotlabs.postmanandroidclient.utils.common.registerTextChange
+import io.rotlabs.postmanandroidclient.utils.rx.SchedulerProvider
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequestViewModel>(),
@@ -23,6 +29,12 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
 
     @Inject
     lateinit var makeRequestSharedViewModel: MakeRequestSharedViewModel
+
+    @Inject
+    lateinit var compositeDisposable: CompositeDisposable
+
+    @Inject
+    lateinit var schedulerProvider: SchedulerProvider
 
     /**
      *  holds the current selected Request Method to be used
@@ -109,7 +121,7 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
         })
 
         makeRequestSharedViewModel.authInfo.observe(this, {
-            Log.d("PUI","authInfo in activity $it")
+            Log.d("PUI", "authInfo in activity $it")
             currentAuthInfo = it
         })
 
@@ -172,9 +184,23 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
 
     private fun setupRequestUrlEditText() {
         binding.etRequestUrl.onFocusChangeListener = this
-        binding.etRequestUrl.registerTextChange { s, _, _, _ ->
-            currentRequestUrl = s.toString()
-        }
+        compositeDisposable.add(
+            binding.etRequestUrl.registerTextChange()
+                .applySearchRxOpeations(schedulerProvider)
+                .subscribe(
+                    {
+                        currentRequestUrl = it
+                    },
+                    {
+                        showToast(it.message ?: "Oops")
+                    }
+                )
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
