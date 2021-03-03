@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.MutableLiveData
 import io.rotlabs.postmanandroidclient.R
 import io.rotlabs.postmanandroidclient.databinding.FragmentAddKeyValueBinding
 import io.rotlabs.postmanandroidclient.di.component.FragmentComponent
@@ -39,6 +40,10 @@ class AddKeyValueBottomSheet :
     lateinit var requestConfigSharedViewModel: RequestConfigSharedViewModel
 
 
+    private var isNew: Boolean = true
+
+    private var keyValueConfig: KeyValueConfig? = null
+
     override fun initializeBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -66,7 +71,8 @@ class AddKeyValueBottomSheet :
      *  setup the initial values if any to display to the user
      */
     private fun setupKeyValueConfig() {
-        val keyValueConfig = arguments?.getSerializable(ARG_KEY_VALUE_CONFIG) as KeyValueConfig?
+        keyValueConfig = arguments?.getSerializable(ARG_KEY_VALUE_CONFIG) as KeyValueConfig?
+        isNew = keyValueConfig == null
         keyValueConfig?.let { config ->
             binding.apply {
                 etKey.setText(config.key)
@@ -88,32 +94,77 @@ class AddKeyValueBottomSheet :
 
         when (getKeyValueType()) {
             KeyValueType.HEADER -> {
-                requestConfigSharedViewModel.headerList.value?.add(
-                    KeyValueConfig(
-                        key,
-                        value,
-                        description,
-                        true
-                    )
+                saveKeyValuePairAndUpdateList(
+                    requestConfigSharedViewModel.headerList,
+                    key,
+                    value,
+                    description
                 )
-                requestConfigSharedViewModel.headerList.postValue(requestConfigSharedViewModel.headerList.value)
             }
             KeyValueType.QUERY_PARAM -> {
-                requestConfigSharedViewModel.paramList.value?.add(
-                    KeyValueConfig(
-                        key,
-                        value,
-                        description,
-                        true
-                    )
+                saveKeyValuePairAndUpdateList(
+                    requestConfigSharedViewModel.paramList,
+                    key,
+                    value,
+                    description
                 )
-                requestConfigSharedViewModel.paramList.postValue(requestConfigSharedViewModel.paramList.value)
             }
         }
 
         dismiss()
         // TODO call viewModel to save the config in local store
 
+    }
+
+    private fun saveKeyValuePairAndUpdateList(
+        liveList: MutableLiveData<ArrayList<KeyValueConfig>>,
+        key: String,
+        value: String,
+        description: String
+    ) {
+        if (isNew) {
+            addKeyValue(
+                liveList.value,
+                key,
+                value,
+                description
+            )
+        } else {
+            updateKeyValue(
+                liveList.value,
+                key,
+                value,
+                description
+            )
+        }
+        liveList.postValue(liveList.value)
+    }
+
+    private fun addKeyValue(
+        list: ArrayList<KeyValueConfig>?,
+        key: String,
+        value: String,
+        description: String
+    ) {
+        list?.add(KeyValueConfig(key, value, description, true))
+    }
+
+    private fun updateKeyValue(
+        list: ArrayList<KeyValueConfig>?,
+        key: String,
+        value: String,
+        description: String
+    ) {
+        keyValueConfig?.let { keyValueConfig ->
+            val oldKeyValueConfig = list?.find {
+                it.key == keyValueConfig.key && it.value == keyValueConfig.value && it.description == keyValueConfig.description
+            }
+            oldKeyValueConfig?.let {
+                it.key = key
+                it.value = value
+                it.description = description
+            }
+        }
     }
 
     private fun getKeyValueType(): String {
