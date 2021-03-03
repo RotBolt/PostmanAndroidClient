@@ -168,7 +168,7 @@ class RestClientTest {
             testUrl.toString(),
             RequestMethod.GET,
             testHelper.getTestParams(),
-            AuthInfo.ApiKeyAuthInfo(testHelper.getTestApiKey()),
+            AuthInfo.ApiKeyAuthInfo(Networking.HEADER_API_KEY, testHelper.getTestApiKey(), true),
             testHelper.getTestHeaders(),
             BodyInfo.NoBody()
         )

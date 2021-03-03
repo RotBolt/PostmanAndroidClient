@@ -108,6 +108,10 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
                 }
             }
         })
+
+        viewModel.malformedUrl.observe(this, {
+            showToast(it)
+        })
     }
 
     private fun setupRequestConfigTabs() {

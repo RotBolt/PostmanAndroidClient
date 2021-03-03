@@ -93,7 +93,8 @@ class RestClient @Inject constructor(private val httpClient: OkHttpClient) {
         bodyInfo: BodyInfo
     ): Request {
         val requestBuilder = Request.Builder()
-            .url(generateHttpUrl(url, params))
+
+        val queryParams = params.toMutableMap()
 
         val requestBody = when (bodyInfo) {
             is BodyInfo.RawBody -> bodyInfo.content.toRequestBody(MimeType.TEXT.type.toMediaTypeOrNull())
@@ -126,7 +127,11 @@ class RestClient @Inject constructor(private val httpClient: OkHttpClient) {
             }
 
             is AuthInfo.ApiKeyAuthInfo -> {
-                requestBuilder.addHeader(Networking.HEADER_API_KEY, authInfo.apiKey)
+                if (authInfo.isHeader) {
+                    requestBuilder.addHeader(authInfo.key, authInfo.value)
+                } else {
+                    queryParams[authInfo.key] = authInfo.value
+                }
             }
 
             is AuthInfo.BasicAuthInfo -> {
@@ -135,6 +140,8 @@ class RestClient @Inject constructor(private val httpClient: OkHttpClient) {
             }
 
         }
+
+        requestBuilder.url(generateHttpUrl(url, queryParams))
 
         return requestBuilder.build()
     }

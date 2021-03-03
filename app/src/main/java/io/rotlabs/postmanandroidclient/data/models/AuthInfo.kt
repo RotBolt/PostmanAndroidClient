@@ -7,7 +7,8 @@ package io.rotlabs.postmanandroidclient.data.models
 sealed class AuthInfo(authType: AuthType) {
     class NoAuth : AuthInfo(AuthType.NO_AUTH)
 
-    data class ApiKeyAuthInfo(val apiKey: String) : AuthInfo(AuthType.API_KEY)
+    data class ApiKeyAuthInfo(val key: String, val value: String, val isHeader: Boolean) :
+        AuthInfo(AuthType.API_KEY)
 
     data class BasicAuthInfo(val login: String, val password: String) :
         AuthInfo(AuthType.BASIC_AUTH)
