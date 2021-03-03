@@ -43,4 +43,8 @@
     <style name="Theme.PostmanAndroidClient.InputField.Outlined" parent="Theme.PostmanAndroidClient.InputField">
         <item name="android:background">@drawable/text_field_bg</item>
     </style>
+
+    <style name="Theme.PostmanAndroidClient.InputField.Outlined.NoHighlight" parent="Theme.PostmanAndroidClient.InputField">
+        <item name="android:background">@drawable/text_field_bg_outlined_no_highlight</item>
+    </style>
 </resources>

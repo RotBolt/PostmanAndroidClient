@@ -107,6 +107,14 @@ class AddKeyValueBottomSheet :
                     description
                 )
             }
+            KeyValueType.FORM_DATA -> {
+                saveKeyValuePairAndUpdateList(
+                    keyValueConfigDataHolder.formDataList,
+                    key,
+                    value,
+                    description
+                )
+            }
         }
 
         dismiss()

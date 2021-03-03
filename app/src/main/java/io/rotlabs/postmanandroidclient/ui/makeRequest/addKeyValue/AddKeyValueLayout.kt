@@ -144,6 +144,10 @@ class AddKeyValueLayout : FrameLayout, View.OnClickListener, KeyValueIncludeChan
             keyValueConfigDataHolder.paramList.observe(lifecycleOwner, {
                 addKeyValueAdapter.updateData(it)
             })
+        } else if (keyValueType == KeyValueType.FORM_DATA) {
+            keyValueConfigDataHolder.formDataList.observe(lifecycleOwner, {
+                addKeyValueAdapter.updateData(it)
+            })
         }
 
     }

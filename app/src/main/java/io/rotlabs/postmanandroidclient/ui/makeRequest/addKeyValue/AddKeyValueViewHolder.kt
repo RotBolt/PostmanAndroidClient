@@ -46,7 +46,6 @@ class AddKeyValueViewHolder(
     override fun setUpObservables() {
         super.setUpObservables()
         viewModel.data.observe(this, { keyValueConfig ->
-            Log.d("PUI", "keyValueConfig $keyValueConfig")
             with(binding) {
                 tvKey.text = keyValueConfig.key
                 tvValue.text = keyValueConfig.value

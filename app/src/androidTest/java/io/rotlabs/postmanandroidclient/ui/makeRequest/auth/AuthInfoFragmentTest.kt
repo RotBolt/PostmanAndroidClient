@@ -17,7 +17,7 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class AuthFragmentTest {
+class AuthInfoFragmentTest {
 
     val testComponentRule =
         TestComponentRule(InstrumentationRegistry.getInstrumentation().targetContext)

@@ -122,7 +122,6 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
         })
 
         makeRequestSharedViewModel.authInfo.observe(this, {
-            Log.d("PUI", "authInfo in activity $it")
             currentAuthInfo = it
         })
 

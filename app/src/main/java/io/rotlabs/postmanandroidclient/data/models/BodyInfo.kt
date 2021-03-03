@@ -11,9 +11,9 @@ sealed class BodyInfo(bodyType: BodyType) {
 
     class NoBody : BodyInfo(BodyType.NO_BODY)
 
-    data class RawBody(val content: String) : BodyInfo(BodyType.RAW)
+    data class RawBody(var content: String) : BodyInfo(BodyType.RAW)
 
-    data class FormDataBody(val content: Map<String, FormDataContent>) :
+    data class FormDataBody(var content: Map<String, FormDataContent>) :
         BodyInfo(BodyType.FORM_DATA)
 }
 
