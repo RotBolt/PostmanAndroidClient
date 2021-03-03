@@ -6,6 +6,7 @@ import dagger.Component
 import io.rotlabs.postmanandroidclient.di.FragmentScope
 import io.rotlabs.postmanandroidclient.di.modules.FragmentModule
 import io.rotlabs.postmanandroidclient.ui.makeRequest.addKeyValue.AddKeyValueBottomSheet
+import io.rotlabs.postmanandroidclient.ui.makeRequest.header.HeaderFragment
 import io.rotlabs.postmanandroidclient.ui.makeRequest.params.ParamsFragment
 
 @FragmentScope
@@ -25,6 +26,8 @@ interface FragmentComponent {
     }
 
     fun inject(fragment: ParamsFragment)
+
+    fun inject(fragment:HeaderFragment)
 
     fun inject(fragment: AddKeyValueBottomSheet)
 }

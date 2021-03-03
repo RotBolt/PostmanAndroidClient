@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
 import io.rotlabs.postmanandroidclient.di.ApplicationContext
+import io.rotlabs.postmanandroidclient.ui.makeRequest.addKeyValue.KeyValueConfigDataHolder
 import io.rotlabs.postmanandroidclient.utils.error.ErrorHelper
 import io.rotlabs.postmanandroidclient.utils.error.ErrorHelperImpl
 import io.rotlabs.postmanandroidclient.utils.network.ConnectivityChecker
@@ -49,5 +50,9 @@ class AppModule {
     @Singleton
     fun providesConnectivityChecker(@ApplicationContext appContext: Context): ConnectivityChecker =
         ConnectivityCheckerImpl(appContext)
+
+    @Provides
+    @Singleton
+    fun providesKeyValueConfigDataHolder(): KeyValueConfigDataHolder = KeyValueConfigDataHolder()
 
 }

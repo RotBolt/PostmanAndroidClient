@@ -37,7 +37,7 @@ class AddKeyValueBottomSheet :
     }
 
     @Inject
-    lateinit var requestConfigSharedViewModel: RequestConfigSharedViewModel
+    lateinit var keyValueConfigDataHolder: KeyValueConfigDataHolder
 
 
     private var isNew: Boolean = true
@@ -95,7 +95,7 @@ class AddKeyValueBottomSheet :
         when (getKeyValueType()) {
             KeyValueType.HEADER -> {
                 saveKeyValuePairAndUpdateList(
-                    requestConfigSharedViewModel.headerList,
+                    keyValueConfigDataHolder.headerList,
                     key,
                     value,
                     description
@@ -103,7 +103,7 @@ class AddKeyValueBottomSheet :
             }
             KeyValueType.QUERY_PARAM -> {
                 saveKeyValuePairAndUpdateList(
-                    requestConfigSharedViewModel.paramList,
+                    keyValueConfigDataHolder.paramList,
                     key,
                     value,
                     description

@@ -24,7 +24,6 @@ abstract class BaseFragment<B : ViewBinding, VM : BaseViewModel> : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies(getFragmentComponent())
         super.onCreate(savedInstanceState)
-        setupObservables()
         viewModel.onCreate()
     }
 
@@ -40,6 +39,7 @@ abstract class BaseFragment<B : ViewBinding, VM : BaseViewModel> : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupView(savedInstanceState)
+        setupObservables()
     }
 
 
@@ -67,7 +67,7 @@ abstract class BaseFragment<B : ViewBinding, VM : BaseViewModel> : Fragment() {
      *  data from viewModel
      */
     protected open fun setupObservables() {
-        viewModel.errorMessage.observe(this, {
+        viewModel.errorMessage.observe(viewLifecycleOwner, {
             showToast(it)
         })
     }

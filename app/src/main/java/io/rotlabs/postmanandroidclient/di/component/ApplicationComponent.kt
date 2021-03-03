@@ -9,6 +9,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.rotlabs.postmanandroidclient.PostmanApp
 import io.rotlabs.postmanandroidclient.di.ApplicationContext
 import io.rotlabs.postmanandroidclient.di.modules.AppModule
+import io.rotlabs.postmanandroidclient.ui.makeRequest.addKeyValue.AddKeyValueLayout
+import io.rotlabs.postmanandroidclient.ui.makeRequest.addKeyValue.KeyValueConfigDataHolder
 import io.rotlabs.postmanandroidclient.utils.error.ErrorHelper
 import io.rotlabs.postmanandroidclient.utils.network.ConnectivityChecker
 import io.rotlabs.postmanandroidclient.utils.rx.SchedulerProvider
@@ -40,5 +42,9 @@ interface ApplicationComponent {
 
     fun getConnectivityChecker(): ConnectivityChecker
 
+    fun getKeyValueConfigDataHolder(): KeyValueConfigDataHolder
+
     fun inject(app: PostmanApp)
+
+    fun inject(layout: AddKeyValueLayout)
 }

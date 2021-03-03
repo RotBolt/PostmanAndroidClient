@@ -8,6 +8,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.rotlabs.postmanandroidclient.ui.base.BaseActivity
 import io.rotlabs.postmanandroidclient.ui.makeRequest.RequestConfigSharedViewModel
 import io.rotlabs.postmanandroidclient.ui.makeRequest.addKeyValue.AddKeyValueViewModel
+import io.rotlabs.postmanandroidclient.ui.makeRequest.header.HeaderViewModel
 import io.rotlabs.postmanandroidclient.ui.makeRequest.params.ParamsViewModel
 import io.rotlabs.postmanandroidclient.utils.ViewModelProviderFactory
 import io.rotlabs.postmanandroidclient.utils.error.ErrorHelper
@@ -34,6 +35,25 @@ class FragmentModule {
                 connectivityChecker
             )
         }).get(ParamsViewModel::class.java)
+    }
+
+
+    @Provides
+    fun provideHeaderViewModel(
+        fragment: Fragment,
+        schedulerProvider: SchedulerProvider,
+        compositeDisposable: CompositeDisposable,
+        errorHelper: ErrorHelper,
+        connectivityChecker: ConnectivityChecker
+    ): HeaderViewModel {
+        return ViewModelProvider(fragment, ViewModelProviderFactory(HeaderViewModel::class) {
+            HeaderViewModel(
+                schedulerProvider,
+                compositeDisposable,
+                errorHelper,
+                connectivityChecker
+            )
+        }).get(HeaderViewModel::class.java)
     }
 
     @Provides
