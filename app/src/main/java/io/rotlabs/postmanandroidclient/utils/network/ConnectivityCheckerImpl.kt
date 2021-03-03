@@ -8,8 +8,9 @@ import androidx.annotation.RequiresApi
 import io.rotlabs.postmanandroidclient.di.ApplicationContext
 import javax.inject.Inject
 
-class ConnectivityCheckerImpl @Inject constructor(
-    @ApplicationContext private val appContext: Context
+class ConnectivityCheckerImpl(
+    @ApplicationContext
+    private val appContext: Context
 ) : ConnectivityChecker {
     override fun isConnected(): Boolean {
         val connectivityManager =

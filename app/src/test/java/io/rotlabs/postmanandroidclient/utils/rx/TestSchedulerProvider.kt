@@ -1,4 +1,4 @@
-package io.rotlabs.postmanandroidclient.utils
+package io.rotlabs.postmanandroidclient.utils.rx
 
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.TestScheduler
