@@ -17,8 +17,8 @@ class AddKeyValueBottomSheet :
 
     companion object {
         const val TAG = "AddKeyValueBottomSheet"
-        private const val ARG_KEY_VALUE_CONFIG = "keyValueConfig"
-        private const val ARG_KEY_VALUE_TYPE = "keyValueType"
+        const val ARG_KEY_VALUE_CONFIG = "keyValueConfig"
+        const val ARG_KEY_VALUE_TYPE = "keyValueType"
         fun newInstance(
             keyValueType: String,
             keyValueConfig: KeyValueConfig?
