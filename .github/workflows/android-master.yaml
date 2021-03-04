@@ -1,0 +1,84 @@
+name: Android CI
+
+on:
+  pull_request:
+    branches:
+      - 'master'
+  push:
+    branches:
+      - 'master'
+
+jobs:
+
+  tests:
+    name: Run Tests
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Install Android Sdk
+        uses: malinskiy/action-android/install-sdk@release/0.1.0
+      - name: Run Unit tests
+        run: bash ./gradlew test --stacktrace
+      - name: Run UI Tests
+        uses: malinskiy/action-android/emulator-run-cmd@release/0.1.0
+        with:
+          api: 21
+          cmd: ./gradlew connectedCheck
+          tag: default
+          abi: x86
+      - name: Save logcat output
+        uses: actions/upload-artifact@master
+        if: failure()
+        with:
+          name: logcat
+          path: artifacts/logcat.log
+
+
+  coverage:
+    needs: [tests]
+    name: Code Coverage
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Install Android Sdk
+        uses: malinskiy/action-android/install-sdk@release/0.1.0
+      - name: jacoco unified coverage
+        uses: malinskiy/action-android/emulator-run-cmd@release/0.1.0
+        with:
+          api: 29
+          cmd: ./gradlew clean jacocoReport
+          tag: default
+          abi: x86
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: app/build/reports/jacoco/jacocoReport/jacocoReport.xml
+
+  apk:
+    needs: [coverage]
+    name: Generate APK
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Build debug APK
+        run: bash ./gradlew assembleDebug --stacktrace
+      - name: Upload APK
+        uses: actions/upload-artifact@v1
+        with:
+          name: app
+          path: app/build/outputs/apk/debug/app-debug.apk
