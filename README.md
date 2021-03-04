@@ -1,4 +1,6 @@
 # PostmanAndroidClient
+[![Android CI](https://github.com/RotBolt/PostmanAndroidClient/actions/workflows/android-master.yaml/badge.svg)](https://github.com/RotBolt/PostmanAndroidClient/actions/workflows/android-master.yaml)
+[![codecov](https://codecov.io/gh/RotBolt/PostmanAndroidClient/branch/master/graph/badge.svg?token=1YVWQFNG4P)](https://codecov.io/gh/RotBolt/PostmanAndroidClient)
 
 ## :construction: :construction: WORK IN PROGRESS :construction: :construction:
 ## About
