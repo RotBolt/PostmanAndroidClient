@@ -13,7 +13,8 @@ jobs:
   tests:
     name: Run Tests
     runs-on: macos-latest
-
+    env:
+      FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
     steps:
       - uses: actions/checkout@v1
       - name: Set up JDK 1.8
@@ -23,8 +24,6 @@ jobs:
       - name: Install Android Sdk
         uses: malinskiy/action-android/install-sdk@release/0.1.0
       - name: Decode google-services.json
-        env:
-        FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
         run: echo $FIREBASE_SECRET > PostmanAndroidClient/app/google-services.json
       - name: Run Unit tests
         run: bash ./gradlew test --stacktrace
@@ -47,7 +46,8 @@ jobs:
     needs: [tests]
     name: Code Coverage
     runs-on: macos-latest
-
+    env:
+      FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
     steps:
       - uses: actions/checkout@v1
       - name: Set up JDK 1.8
@@ -55,8 +55,6 @@ jobs:
         with:
           java-version: 1.8
       - name: Decode google-services.json
-        env:
-        FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
         run: echo $FIREBASE_SECRET > PostmanAndroidClient/app/google-services.json
       - name: Install Android Sdk
         uses: malinskiy/action-android/install-sdk@release/0.1.0
