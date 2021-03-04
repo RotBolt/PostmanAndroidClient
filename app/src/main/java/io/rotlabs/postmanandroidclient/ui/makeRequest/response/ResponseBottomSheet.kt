@@ -55,6 +55,9 @@ class ResponseBottomSheet :
             response?.let {
                 binding.noRequestResponseContainer.isVisible = false
                 (responseInfoFragments[1] as ResponseHeaderFragment).setHeaderMap(it.headers.toMap())
+
+                binding.tvStatusCode.text = "Status: ${it.code}"
+
             }
         })
         makeRequestSharedViewModel.responseText.observe(this, { responseString ->

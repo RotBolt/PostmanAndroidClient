@@ -54,6 +54,17 @@ android {
         jvmTarget = '1.8'
     }
 
+    testOptions {
+//        For Roboelectric tests
+//        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        animationsDisabled true
+
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
+    }
+
 }
 
 dependencies {
