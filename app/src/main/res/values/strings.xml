@@ -4,4 +4,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_auth_info">This request does not use any authorization.</string>
     <string name="no_body_info">This request does not have a body</string>
+    <string name="send_to_see_response">Hit Send to see the Response</string>
+    <string name="sending_request">Sending Request ...</string>
 </resources>

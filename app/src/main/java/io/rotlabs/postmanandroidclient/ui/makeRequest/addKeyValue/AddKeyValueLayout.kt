@@ -188,7 +188,17 @@ class AddKeyValueLayout : FrameLayout, View.OnClickListener, KeyValueIncludeChan
 
     override fun onKeyValueIncludeChange(keyValueConfig: KeyValueConfig, position: Int) {
         addKeyValueAdapter.dataList[position] = keyValueConfig
-        keyValueConfigDataHolder.paramList.postValue(addKeyValueAdapter.dataList)
+        when (keyValueType) {
+            KeyValueType.QUERY_PARAM -> {
+                keyValueConfigDataHolder.paramList.postValue(addKeyValueAdapter.dataList)
+            }
+            KeyValueType.FORM_DATA -> {
+                keyValueConfigDataHolder.formDataList.postValue(addKeyValueAdapter.dataList)
+            }
+            KeyValueType.HEADER -> {
+                keyValueConfigDataHolder.headerList.postValue(addKeyValueAdapter.dataList)
+            }
+        }
     }
 
     override fun onDeleteKeyValueConfig(keyValueConfig: KeyValueConfig, position: Int) {

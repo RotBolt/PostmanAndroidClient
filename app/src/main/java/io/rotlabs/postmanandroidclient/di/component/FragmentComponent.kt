@@ -10,6 +10,7 @@ import io.rotlabs.postmanandroidclient.ui.makeRequest.auth.AuthInfoFragment
 import io.rotlabs.postmanandroidclient.ui.makeRequest.body.BodyFragment
 import io.rotlabs.postmanandroidclient.ui.makeRequest.header.HeaderFragment
 import io.rotlabs.postmanandroidclient.ui.makeRequest.params.ParamsFragment
+import io.rotlabs.postmanandroidclient.ui.makeRequest.response.ResponseBottomSheet
 
 @FragmentScope
 @Component(
@@ -36,5 +37,7 @@ interface FragmentComponent {
     fun inject(fragment: AuthInfoFragment)
 
     fun inject(fragment: BodyFragment)
+
+    fun inject(fragment: ResponseBottomSheet)
 
 }

@@ -21,7 +21,9 @@
     </style>
 
 
-    <style name="AppModalStyle" parent="@style/Theme.Design.Light.BottomSheetDialog">
+    <style name="AppModalStyle" parent="@style/Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="colorPrimary">@color/colorOrange</item>
+        <item name="colorPrimaryDark">@color/colorOrange</item>
         <item name="android:windowIsFloating">false</item>
         <item name="bottomSheetStyle">@style/BottomSheet</item>
     </style>

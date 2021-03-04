@@ -16,6 +16,7 @@ import io.rotlabs.postmanandroidclient.data.models.RequestMethod
 import io.rotlabs.postmanandroidclient.databinding.ActivityMakeRequestBinding
 import io.rotlabs.postmanandroidclient.di.component.ActivityComponent
 import io.rotlabs.postmanandroidclient.ui.base.BaseActivity
+import io.rotlabs.postmanandroidclient.ui.makeRequest.response.ResponseBottomSheet
 import io.rotlabs.postmanandroidclient.utils.common.Toaster
 import io.rotlabs.postmanandroidclient.utils.common.applySearchRxOpeations
 import io.rotlabs.postmanandroidclient.utils.common.hideSoftKeyboard
@@ -36,6 +37,7 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
 
     @Inject
     lateinit var schedulerProvider: SchedulerProvider
+
 
     /**
      *  holds the current selected Request Method to be used
@@ -101,6 +103,7 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
 
         viewModel.response.observe(this, {
             makeRequestSharedViewModel.response.postValue(it)
+            makeRequestSharedViewModel.responseText.postValue(it.body?.string().toString())
         })
 
         makeRequestSharedViewModel.paramList.observe(this, { list ->
@@ -130,7 +133,17 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
         })
 
         viewModel.malformedUrl.observe(this, {
-            showToast(it)
+            binding.etRequestUrl.error = it
+        })
+
+        viewModel.progress.observe(this, {
+            makeRequestSharedViewModel.requestProgress.postValue(it)
+        })
+
+        viewModel.openBottomSheet.observe(this, {
+            if (it) {
+                openResponseBottomSheet()
+            }
         })
     }
 
@@ -225,6 +238,8 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btnSend -> {
+                makeRequestSharedViewModel.response.postValue(null)
+                makeRequestSharedViewModel.responseText.postValue(null)
                 viewModel.makeRequest(
                     currentRequestUrl,
                     currentRequestMethod,
@@ -233,11 +248,18 @@ class MakeRequestActivity : BaseActivity<ActivityMakeRequestBinding, MakeRequest
                     currentHeaders,
                     currentBodyInfo
                 )
-                // TODO open Response Bottom Sheet
             }
             R.id.btnResponse -> {
-                // TODO open bottom sheet
+                openResponseBottomSheet()
+                viewModel.response.value?.let {
+                    makeRequestSharedViewModel.response.postValue(it)
+                }
             }
         }
+    }
+
+    private fun openResponseBottomSheet() {
+        val responseBottomSheet = ResponseBottomSheet()
+        responseBottomSheet.show(supportFragmentManager, ResponseBottomSheet.TAG)
     }
 }

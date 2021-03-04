@@ -35,4 +35,11 @@ class MakeRequestSharedViewModel : ViewModel() {
     val bodyInfo = MutableLiveData<BodyInfo>()
 
     val response = MutableLiveData<Response>()
+
+    val responseText = MutableLiveData<String>()
+
+    /**
+     *  To share request progress accross ReponseBottomSheet
+     */
+    val requestProgress = MutableLiveData<Boolean>()
 }

@@ -11,6 +11,7 @@ import io.rotlabs.postmanandroidclient.ui.makeRequest.auth.AuthInfoViewModel
 import io.rotlabs.postmanandroidclient.ui.makeRequest.body.BodyViewModel
 import io.rotlabs.postmanandroidclient.ui.makeRequest.header.HeaderViewModel
 import io.rotlabs.postmanandroidclient.ui.makeRequest.params.ParamsViewModel
+import io.rotlabs.postmanandroidclient.ui.makeRequest.response.ResponseViewModel
 import io.rotlabs.postmanandroidclient.utils.ViewModelProviderFactory
 import io.rotlabs.postmanandroidclient.utils.error.ErrorHelper
 import io.rotlabs.postmanandroidclient.utils.network.ConnectivityChecker
@@ -91,6 +92,24 @@ class FragmentModule {
                 connectivityChecker
             )
         }).get(BodyViewModel::class.java)
+    }
+
+    @Provides
+    fun provideResponseViewModel(
+        fragment: Fragment,
+        schedulerProvider: SchedulerProvider,
+        compositeDisposable: CompositeDisposable,
+        errorHelper: ErrorHelper,
+        connectivityChecker: ConnectivityChecker
+    ): ResponseViewModel {
+        return ViewModelProvider(fragment, ViewModelProviderFactory(ResponseViewModel::class) {
+            ResponseViewModel(
+                schedulerProvider,
+                compositeDisposable,
+                errorHelper,
+                connectivityChecker
+            )
+        }).get(ResponseViewModel::class.java)
     }
 
     @Provides

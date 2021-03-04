@@ -53,13 +53,7 @@ class RestClient @Inject constructor(private val httpClient: OkHttpClient) {
                             }
 
                             override fun onResponse(call: Call, response: Response) {
-                                val responseString = response.peekBody(2048).string()
-
-                                if (responseString.isNotEmpty()) {
-                                    emitter.onSuccess(response)
-                                } else {
-                                    emitter.onError(NullPointerException(RECEIVED_RESPONSE_NULL))
-                                }
+                                emitter.onSuccess(response)
                             }
 
                         })
@@ -98,8 +92,14 @@ class RestClient @Inject constructor(private val httpClient: OkHttpClient) {
 
         val requestBody = when (bodyInfo) {
             is BodyInfo.RawBody -> bodyInfo.content.toRequestBody(MimeType.TEXT.type.toMediaTypeOrNull())
-            is BodyInfo.FormDataBody -> generateFormDataRequestBody(bodyInfo)
-            is BodyInfo.NoBody -> null
+            is BodyInfo.FormDataBody -> {
+                if (bodyInfo.content.isNotEmpty()) {
+                    generateFormDataRequestBody(bodyInfo)
+                } else {
+                    "".toRequestBody()
+                }
+            }
+            is BodyInfo.NoBody -> "".toRequestBody()
         }
 
         when (requestMethod) {
@@ -204,12 +204,4 @@ class RestClient @Inject constructor(private val httpClient: OkHttpClient) {
         return formDataRequestBuilder.build()
     }
 
-//    private fun indentJsonString(json: String): String {
-//        val source = Buffer().writeUtf8(json)
-//        val reader = JsonReader.of(source)
-//        val value = reader.readJsonValue()
-//        val adapter: JsonAdapter<Any> =
-//            Moshi.Builder().build().adapter(Any::class.java).indent("\t")
-//        return adapter.toJson(value)
-//    }
 }

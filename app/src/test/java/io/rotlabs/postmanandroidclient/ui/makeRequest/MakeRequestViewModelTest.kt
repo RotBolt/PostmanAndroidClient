@@ -185,9 +185,6 @@ class MakeRequestViewModelTest {
             bodyInfo
         )
 
-        verify(progressObserver).onChanged(false)
-        verify(progressObserver).onChanged(true)
-
         verify(malformedUrlObserver).onChanged(RestClient.MALFORMED_URL)
 
         assert(makeRequestViewModel.malformedUrl.value == RestClient.MALFORMED_URL)

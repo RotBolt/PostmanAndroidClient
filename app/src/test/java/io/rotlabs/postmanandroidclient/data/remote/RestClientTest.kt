@@ -308,25 +308,4 @@ class RestClientTest {
 
     }
 
-    @Test
-    fun given_valid_request_and_null_response_should_make_request_call_and_recieve_should_propogate_error() {
-
-        server.enqueue(MockResponse())
-
-        val response: TestObserver<Response> = restClient.makeRequestCall(
-            testUrl.toString(),
-            RequestMethod.GET,
-            testHelper.getTestParams(),
-            AuthInfo.NoAuth(),
-            testHelper.getTestHeaders(),
-            BodyInfo.NoBody()
-        ).test()
-
-        server.takeRequest()
-
-        response.awaitDone(3, TimeUnit.SECONDS)
-        response.assertError {
-            it.message == RestClient.RECEIVED_RESPONSE_NULL
-        }
-    }
 }

@@ -1,5 +1,6 @@
 package io.rotlabs.postmanandroidclient.ui.makeRequest
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.disposables.CompositeDisposable
@@ -33,6 +34,9 @@ class MakeRequestViewModel(
     private val _response = MutableLiveData<Response>()
     val response: LiveData<Response> = _response
 
+    private val _openBottomSheet = MutableLiveData<Boolean>()
+    val openBottomSheet: LiveData<Boolean> = _openBottomSheet
+
     override fun onCreate() {}
 
     fun makeRequest(
@@ -43,8 +47,9 @@ class MakeRequestViewModel(
         headers: Map<String, String>,
         bodyInfo: BodyInfo
     ) {
-        _progress.postValue(true)
         if (!url.isNullOrEmpty() && isValidURL(url)) {
+            _openBottomSheet.postValue(true)
+            _progress.postValue(true)
             compositeDisposable.add(
                 restClient.makeRequestCall(
                     url,
@@ -64,7 +69,6 @@ class MakeRequestViewModel(
                     })
             )
         } else {
-            _progress.postValue(false)
             _malformedUrl.postValue(RestClient.MALFORMED_URL)
         }
     }

@@ -1,10 +1,12 @@
 package io.rotlabs.postmanandroidclient.ui.base
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.rotlabs.postmanandroidclient.PostmanApp
 import io.rotlabs.postmanandroidclient.R
@@ -44,6 +46,9 @@ abstract class BaseBottomSheetFragment<B : ViewBinding, VM : BaseViewModel> :
     }
 
     override fun getTheme(): Int = R.style.AppModalStyle
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
+        BottomSheetDialog(requireContext(), theme)
 
     /**
      *  View Binding for this fragment

@@ -1,6 +1,7 @@
 package io.rotlabs.postmanandroidclient.ui.base
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -66,6 +67,7 @@ abstract class BaseActivity<B : ViewBinding, VM : BaseViewModel> : AppCompatActi
      */
     protected open fun setupObservables() {
         viewModel.errorMessage.observe(this, {
+            Log.d("PUI","errormessage $it")
             showToast(it)
         })
     }

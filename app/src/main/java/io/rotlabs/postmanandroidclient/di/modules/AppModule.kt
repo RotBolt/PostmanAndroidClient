@@ -25,7 +25,7 @@ class AppModule {
         cache: Cache
     ): OkHttpClient {
         return OkHttpClient().newBuilder()
-            .cache(cache)
+//            .cache(cache)
             .build()
     }
 
