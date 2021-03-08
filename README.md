@@ -6,6 +6,9 @@
 ## About
 Android client for Postman
 
+## Download the debug apk from below
+[![Debug APK](https://img.shields.io/badge/APK-brightgreen?style=for-the-badge&logo=android)](apk/app-debug.apk)
+
 ## Currently Building With 🛠
 - [Kotlin](https://kotlinlang.org/) - First class and official programming language for Android development.
 - [RxJava2](https://github.com/ReactiveX/RxJava/tree/2.x) - Java VM implementation of Reactive Extensions: a library for composing asynchronous and event-based programs by using observable sequences.
