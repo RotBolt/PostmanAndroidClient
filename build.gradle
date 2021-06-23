@@ -97,7 +97,7 @@ ext {
     // Test Coverage
     jacoco_version = '0.8.5'
 
-    // firebase
+    // Firebase
     firebase_version = '26.2.0'
 
 }
